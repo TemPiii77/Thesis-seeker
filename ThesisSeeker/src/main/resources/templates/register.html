@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Regisztráció</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel='stylesheet' href='style.css'>
+</head>
+
+<body>
+
+<h1>Szakdolgozatok</h1>
+
+<header>
+    <nav>
+        <div>
+            <div>
+                <ul>
+                    <li>
+                        <a href="/">Főoldal</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/login">Bejelentkezés</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/register">Regisztráció</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout">Kijelentkezés</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="register" id="masodik">
+    <div th:if="${param.error}">
+        <div class="alert">
+            <span th:text="#{register.error}"></span>
+        </div>
+    </div>
+    <div th:if="${param.success}">
+        <div class="success">
+            <span th:text="#{register.success}"></span>
+        </div>
+    </div>
+    <h2>Hallgatói regisztráció</h2>
+    <form action="#" th:action="@{/registerhallgato}" method="post">
+        <label>Egyetemi azonosító:
+            <input type="text" name="egyetemiAzonosito" required minlength="6" maxlength="6">
+        </label>
+        <label>Előtag:
+            <select name="elotag">
+                <option></option>
+                <option value="Dr.">Dr.</option>
+                <option value="dr.">dr.</option>
+                <option value="Prof.">Prof.</option>
+            </select>
+        </label>
+        <label>Vezetéknév:
+            <input type="text" name="vezeteknev" required maxlength="100">
+        </label>
+        <label>Keresztnév:
+            <input type="text" name="keresztnev" required maxlength="100">
+        </label>
+        <label>Jelszó:
+            <input type="password" name="jelszo" required minlength="8" maxlength="128">
+        </label>
+        <label>Jelszó újra:
+            <input type="password" name="jelszoUjra" required minlength="8" maxlength="128">
+        </label>
+        <input type="submit" value="Regisztráció">
+    </form>
+</div>
+
+<br>
+
+<div class="register">
+    <div th:if="${param.error2}">
+        <div class="alert">
+            <span th:text="#{register.error2}"></span>
+        </div>
+    </div>
+    <div th:if="${param.success2}">
+        <div class="success">
+            <span th:text="#{register.success2}"></span>
+        </div>
+    </div>
+    <h2>Belső témavezetői regisztráció</h2>
+    <form action="#" th:action="@{/registerbelsotv}" method="post">
+        <label>Egyetemi azonosító:
+            <input type="text" name="egyetemiAzonosito" required minlength="6" maxlength="6">
+        </label>
+        <label>Előtag:
+            <select name="elotag">
+                <option value=""></option>
+                <option value="Dr.">Dr.</option>
+                <option value="dr.">dr.</option>
+                <option value="Prof.">Prof.</option>
+            </select>
+        </label>
+        <label>Vezetéknév:
+            <input type="text" name="vezeteknev" required maxlength="100">
+        </label>
+        <label>Keresztnév:
+            <input type="text" name="keresztnev" required maxlength="100">
+        </label>
+        <label>Jelszó:
+            <input type="password" name="jelszo" required minlength="8" maxlength="128">
+        </label>
+        <label>Jelszó újra:
+            <input type="password" name="jelszoUjra" required minlength="8" maxlength="128">
+        </label>
+        <label>Munkaköri beosztás:
+            <select name="munkakoriBeosztas" required>
+                <option value="egyetemi tanár">Egyetemi tanár</option>
+                <option value="egyetemi docens">Egyetemi docens</option>
+                <option value="adjunktus">Adjunktus</option>
+                <option value="tanársegéd">Tanársegéd</option>
+                <option value="PhD hallgató">PhD hallgató</option>
+            </select>
+        </label>
+        <label>Tanszék neve ahol dolgozik:
+            <select name="tanszekNev" required>
+                <option th:each="tanszek : ${tanszekek}" th:value="${tanszek.getTanszekNev()}" th:text="${tanszek.getTanszekNev()}"></option>
+            </select>
+        </label>
+        <input type="submit" value="Regisztráció">
+    </form>
+</div>
+</body>
+</html>

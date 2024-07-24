@@ -1,0 +1,250 @@
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: rgb(46, 48, 62);
+    color: white;
+
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    padding: 1px;
+    border-collapse: collapse;
+}
+
+.register, #login, #editprofile, #hirhozzadas, #editnews {
+    width: 400px;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    padding: 20px;
+    background-color: #eee;
+}
+
+.register h2, #login h2, #editprofile h2, #editprofile h3, .error-text {
+    text-align: center;
+    color: #333;
+}
+
+.register label, #login label, #editprofile label, #hirhozzadas label, #editnews label {
+    display: block;
+    margin: 10px 0;
+}
+
+.register input, #login input, #editprofile input, #hirhozzadas input, #editnews input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+#editprofile #tiltallapot {
+    display: flex;
+    align-items: center;
+}
+
+#tiltallapotinput {
+    width: 20px !important;
+    margin-right: 10px;
+    height: 20px;
+}
+
+.register select, #hirhozzadas select, #editnews select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+.register .btn-sm, #login .btn-sm, #editprofile .btn-sm, #hirhozzadas .btn-sm, #editnews .btn-sm {
+    width: 150px;
+    margin: 10px auto;
+    display: block;
+}
+
+header {
+    float: left;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    height: 100vh;
+    background-color: dimgray;
+    text-align: center;
+}
+
+li a {
+    display: block;
+    color: white;
+    padding: 20px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+li a:hover {
+    background-color: #555;
+    color: white;
+}
+
+main {
+    padding-left: 230px;
+
+}
+
+label {
+    color: black;
+    font-weight: bold;
+}
+
+h1 {
+    text-align: center;
+    padding-bottom: 20px;
+    margin: 0;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.listazas {
+    border-collapse: collapse;
+    width: 100%;
+    color: black;
+    border: 1px solid black;
+}
+
+.listazas th, .listazas td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+.listazas th {
+    background-color: black;
+    font-weight: bold;
+    color: white;
+}
+
+.listazas tr {
+    background-color: white;
+}
+
+
+.listazas tr:nth-child(even) {
+    background-color: #9c9c9c;
+}
+
+.listazas a {
+    color: #0078d4;
+    text-decoration: none;
+}
+
+#cikkek {
+    width: 100%;
+    background: antiquewhite;
+    font-size: 20px;
+    border: 0px;
+    padding: 10px;
+}
+
+#cikkek td {
+    border: 0px;
+    border-bottom: 1px solid black !important;
+}
+
+#cikkek a {
+    text-decoration: none;
+    color: black;
+}
+
+.alert {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.success {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+}
+
+main h1 {
+    color: red;
+}
+
+.feher label {
+    color: red;
+}

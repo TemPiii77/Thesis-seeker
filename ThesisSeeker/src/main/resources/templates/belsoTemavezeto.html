@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Belső témavezetőknek</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel='stylesheet' href='style.css'>
+</head>
+
+<body class="feher">
+<h1>Belső témavezetőknek</h1>
+
+<header>
+    <nav>
+        <div>
+            <div>
+                <ul>
+                    <li>
+                        <a href="/">Főoldal</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/login">Bejelentkezés</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/register">Regisztráció</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout">Kijelentkezés</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_HALLGATO') or hasAuthority('ROLE_ADMIN')">
+                        <a href="/hallgato">Hallgatóknak</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_BELSOTV') or hasAuthority('ROLE_ADMIN')">
+                        <a href="/belsoTemavezeto">Belső témavezetőknek</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_KULSOTV') or hasAuthority('ROLE_ADMIN')">
+                        <a href="/kulsoTemavezeto">Külső témavezetőknek</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                        <a href="/admin">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+    <h2>Üdvözöljük !</h2>
+
+    <h2>Hány hallgatója védett sikeresen félévente.</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Témavezető egyetemi azonosítója</th>
+            <th>Védés éve</th>
+            <th>Dolgozatok száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="statisztika : ${temavezetonekHanyHallgatojaVedettSikeresenFelevente}">
+            <td th:text="${statisztika['Témavezető egyetemi azonosítója']}"></td>
+            <td th:text="${statisztika['Védés éve']}"></td>
+            <td th:text="${statisztika['Dolgozatok száma']}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Dolgozat címének módosítása</h2>
+    <form action="#" th:action="@{/updateDolgozatCime}" th:object="${dolgozat}" method="post">
+
+        <label>Dolgozat azonosítója:
+            <select name="dolgozatAzonosito" id="dolgozatAzonosito" th:field="${dolgozat.dolgozatAzonosito}" required>
+                <option th:each="dolgozat : ${dolgozatok}" th:value="${dolgozat.getDolgozatAzonosito()}"
+                        th:text="${dolgozat.getDolgozatAzonosito() + ' - ' + dolgozat.getCim()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Dolgozat címe:
+            <input type="text" name="cim" maxlength="150" id="cim" th:field="${dolgozat.cim}" required>
+        </label>
+        <br>
+        <br>
+
+        <input type="submit" value="Dolgozat módosítása">
+    </form>
+
+
+    <br>
+    <table>
+        <tr>
+            <td>Dolgozat azonosítója</td>
+            <td>Dolgozat címe</td>
+            <td>Beadás éve</td>
+            <td>Védés éve</td>
+            <td>Védés érdemjegye</td>
+            <td>Hallgató egyetemi azonosítója</td>
+            <td>Szak azonosítója</td>
+            <td>Tanszék neve</td>
+        </tr>
+        <tr th:each="dolgozat : ${dolgozatok}">
+            <td th:text="${dolgozat.getDolgozatAzonosito()}"></td>
+            <td th:text="${dolgozat.getCim()}"></td>
+            <td th:text="${dolgozat.getBeadasEve()}"></td>
+            <td th:text="${dolgozat.getVedesEve()}"></td>
+            <td th:text="${dolgozat.getVedesErdemjegye()}"></td>
+            <td th:text="${dolgozat.getEgyetemiAzonosito()}"></td>
+            <td th:text="${dolgozat.getSzakAzonosito()}"></td>
+            <td th:text="${dolgozat.getTanszekNev()}"></td>
+        </tr>
+    </table>
+    <br>
+    <br>
+
+</main>
+</body>
+</html>

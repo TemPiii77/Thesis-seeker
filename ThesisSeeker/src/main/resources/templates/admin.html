@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Admin</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel='stylesheet' href='style.css'>
+</head>
+
+<body class="feher">
+
+<header>
+    <nav>
+        <div>
+            <div>
+                <ul>
+                    <li>
+                        <a href="/">Főoldal</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/login">Bejelentkezés</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/register">Regisztráció</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout">Kijelentkezés</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_HALLGATO') or hasAuthority('ROLE_ADMIN')">
+                        <a href="/hallgato">Hallgatóknak</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_BELSOTV') or hasAuthority('ROLE_ADMIN')">
+                        <a href="/belsoTemavezeto">Belső témavezetőknek</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_KULSOTV') or hasAuthority('ROLE_ADMIN')">
+                        <a href="/kulsoTemavezeto">Külső témavezetőknek</a>
+                    </li>
+                    <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                        <a href="/admin">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+    <h2>Üdvözöljük !</h2>
+
+    <h1>Kar</h1>
+
+    <h2>Kar létrehozása</h2>
+    <form action="#" th:action="@{/createKar}" th:object="${kar}" method="post">
+        <label>Kar neve:
+            <input type="text" name="karNev" th:field="${kar.karNev}" required maxlength="10">
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Kar létrehozása">
+    </form>
+
+    <h2>Kar törlése</h2>
+    <form action="#" th:action="@{/deleteKar}" th:object="${kar}" method="post">
+        <label>Kar neve:
+            <select name="karNev" th:field="${kar.karNev}" required>
+                <option th:each="kar : ${karok}" th:value="${kar.getKarNev()}" th:text="${kar.getKarNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Kar törlése">
+    </form>
+
+    <br>
+
+    <table>
+        <tr>
+            <td>Kar neve</td>
+        </tr>
+        <tr th:each="kar : ${karok}">
+            <td th:text="${kar.getKarNev()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h1>Intézet</h1>
+
+
+    <h2>Intézet létrehozása</h2>
+    <form action="#" th:action="@{/createIntezet}" th:object="${intezet}" method="post">
+        <label>Intézet neve:
+            <input type="text" name="intezetNev" th:field="${intezet.intezetNev}" required maxlength="100">
+        </label>
+        <br>
+        <br>
+        <label>Kar neve:
+            <select name="karNev" th:field="${intezet.karNev}">
+                <option th:each="kar : ${karok}" th:value="${kar.getKarNev()}" th:text="${kar.getKarNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Intézet létrehozása">
+    </form>
+
+    <h2>Intézet módosítása</h2>
+    <form action="#" th:action="@{/updateIntezet}" th:object="${intezet}" method="post">
+        <label>Intézet neve:
+            <select name="intezetNev" th:field="${intezet.intezetNev}" required>
+                <option th:each="intezet : ${intezetek}" th:value="${intezet.getIntezetNev()}" th:text="${intezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Kar neve:
+            <select name="karNev" th:field="${intezet.karNev}" required>
+                <option th:each="kar : ${karok}" th:value="${kar.getKarNev()}" th:text="${kar.getKarNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Intézet módosítása">
+    </form>
+
+    <h2>Intézet törlése</h2>
+    <form action="#" th:action="@{/deleteIntezet}" th:object="${intezet}" method="post">
+        <label>Kar neve:
+            <select name="intezetNev" th:field="${intezet.intezetNev}" required>
+                <option th:each="intezet : ${intezetek}" th:value="${intezet.getIntezetNev()}" th:text="${intezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Intézet törlése">
+    </form>
+    <br>
+    <br>
+
+
+    <table>
+        <tr>
+            <td>Intézet neve</td>
+            <td>Kar neve</td>
+        </tr>
+        <tr th:each="intezet : ${intezetek}">
+            <td th:text="${intezet.getIntezetNev()}"></td>
+            <td th:text="${intezet.getKarNev()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h1>Tanszék</h1>
+
+
+    <h2>Tanszék létrehozása</h2>
+    <form action="#" th:action="@{/createTanszek}" th:object="${tanszek}" method="post">
+        <label>Tanszék neve:
+            <input type="text" name="tanszekNev" th:field="${tanszek.tanszekNev}" required maxlength="100">
+        </label>
+        <br>
+        <br>
+        <label>Intézet neve:
+            <select name="intezetNev" th:field="${tanszek.intezetNev}" required>
+                <option th:each="intezet : ${intezetek}" th:value="${intezet.getIntezetNev()}" th:text="${intezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Tanszék létrehozása">
+    </form>
+
+    <h2>Tanszék módosítása</h2>
+    <form action="#" th:action="@{/updateTanszek}" th:object="${tanszek}" method="post">
+        <label>Tanszék neve:
+            <select name="tanszekNev" th:field="${tanszek.tanszekNev}" required>
+                <option th:each="tanszek : ${tanszekek}" th:value="${tanszek.getTanszekNev()}" th:text="${tanszek.getTanszekNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Intézet neve:
+            <select name="intezetNev" th:field="${tanszek.intezetNev}" required>
+                <option th:each="intezet : ${intezetek}" th:value="${intezet.getIntezetNev()}" th:text="${intezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Tanszék módosítása">
+    </form>
+
+    <h2>Tanszék törlése</h2>
+    <form action="#" th:action="@{/deleteTanszek}" th:object="${tanszek}" method="post">
+        <label>Tanszék neve:
+            <select name="tanszekNev" th:field="${tanszek.tanszekNev}" required>
+                <option th:each="tanszek : ${tanszekek}" th:value="${tanszek.getTanszekNev()}" th:text="${tanszek.getTanszekNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Tanszék törlése">
+    </form>
+
+    <br>
+    <br>
+
+
+    <table>
+        <tr>
+            <td>Tanszék neve</td>
+            <td>Intézet neve</td>
+        </tr>
+        <tr th:each="tanszek : ${tanszekek}">
+            <td th:text="${tanszek.getTanszekNev()}"></td>
+            <td th:text="${tanszek.getIntezetNev()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h1>Szakintézetek</h1>
+
+
+    <h2>Szak-intézet kapcsolat létrehozása</h2>
+    <form action="#" th:action="@{/createSzakintezet}" th:object="${szakintezet}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" th:field="${szakintezet.szakAzonosito}" required>
+                <option th:each="szak : ${szakok}" th:value="${szak.getSzakAzonosito()}" th:text="${szak.getSzakAzonosito() + ' - ' + szak.getSzaknev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Intézet neve:
+            <select name="intezetNev" th:field="${szakintezet.intezetNev}" required>
+                <option th:each="intezet : ${intezetek}" th:value="${intezet.getIntezetNev()}" th:text="${intezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Szak-intézet kapcsolat létrehozása">
+    </form>
+
+    <h2>Szak-intézet kapcsolat módosítása</h2>
+    <form action="#" th:action="@{/updateSzakintezet}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" required>
+                <option th:each="szakintezet : ${szakintezetek}" th:value="${szakintezet.getSzakAzonosito() + ';' + szakintezet.getIntezetNev()}"
+                        th:text="${szakintezet.getSzakAzonosito() + ' - ' + szakintezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Intézet neve:
+            <select name="intezetNev" required>
+                <option th:each="intezet : ${intezetek}" th:value="${intezet.getIntezetNev()}" th:text="${intezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Szak-intézet kapcsolat létrehozása">
+    </form>
+
+    <h2>Szak-intézet kapcsolat törlése</h2>
+    <form action="#" th:action="@{/deleteSzakintezet}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" required>
+                <option th:each="szakintezet : ${szakintezetek}" th:value="${szakintezet.getSzakAzonosito() + ';' + szakintezet.getIntezetNev()}"
+                        th:text="${szakintezet.getSzakAzonosito() + ' - ' + szakintezet.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Szak-intézet kapcsolat törlése">
+    </form>
+
+    <br>
+    <br>
+
+
+    <table>
+        <tr>
+            <td>Szak azonosítója</td>
+            <td>Intézet neve</td>
+        </tr>
+        <tr th:each="szakintezet : ${szakintezetek}">
+            <td th:text="${szakintezet.getSzakAzonosito()}"></td>
+            <td th:text="${szakintezet.getIntezetNev()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h1>Szak</h1>
+
+
+    <h2>Szak létrehozása</h2>
+    <form action="#" th:action="@{/createSzak}" th:object="${szak}" method="post">
+        <label>Szak azonosítója:
+            <input type="text" name="szakAzonosito" required maxlength="25">
+        </label>
+        <br>
+        <br>
+        <label>Szak neve:
+            <input type="text" name="szaknev" required maxlength="100">
+        </label>
+        <br>
+        <br>
+        <label>Kar neve:
+            <select name="karNev" required>
+                <option th:each="kar : ${karok}" th:value="${kar.getKarNev()}" th:text="${kar.getKarNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Szak létrehozása">
+    </form>
+
+    <h2>Szak módosítása</h2>
+    <form action="#" th:action="@{/updateSzak}" th:object="${szak}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" required>
+                <option th:each="szak : ${szakok}" th:value="${szak.getSzakAzonosito()}"
+                        th:text="${szak.getSzakAzonosito() + ' - ' + szak.getSzaknev() + ' - ' + szak.getKarNev()}" th:field="${szak.szakAzonosito}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Szak neve:
+            <input type="text" name="szaknev" th:field="${szak.szaknev}" required maxlength="100">
+        </label>
+        <br>
+        <br>
+        <label>Kar neve:
+            <select name="karNev" required>
+                <option th:each="kar : ${karok}" th:value="${kar.getKarNev()}" th:text="${kar.getKarNev()}" th:field="${szak.karNev}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Szak módosítása">
+    </form>
+
+    <h2>Szak törlése</h2>
+    <form action="#" th:action="@{/deleteSzak}" th:object="${szak}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" required>
+                <option th:each="szak : ${szakok}" th:value="${szak.getSzakAzonosito()}" th:text="${szak.getSzakAzonosito() + ' - ' + szak.getSzaknev()}"
+                        th:field="${szak.szakAzonosito}" ></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Szak törlése">
+    </form>
+    <br>
+    <br>
+
+
+    <table>
+        <tr>
+            <td>Szak azonosítója</td>
+            <td>Szak neve</td>
+            <td>Kar neve</td>
+        </tr>
+        <tr th:each="szak : ${szakok}">
+            <td th:text="${szak.getSzakAzonosito()}"></td>
+            <td th:text="${szak.getSzaknev()}"></td>
+            <td th:text="${szak.getKarNev()}"></td>
+        </tr>
+    </table>
+
+
+    <br>
+
+    <h1>Hallgató</h1>
+
+
+    <h2>Hallgatói jogviszony megváltoztatása</h2>
+    <form action="#" th:action="@{/updateHallgato}" method="post">
+        <label>Hallgató:
+            <select name="egyetemiAzonosito" required>
+                <option th:each="hallgato : ${hallgatok}" th:value="${hallgato.getEgyetemiAzonosito() + ';' + hallgato.getJogviszony()}"
+                        th:text="${hallgato.getEgyetemiAzonosito() + ' - ' + hallgato.getElotag() + ' ' + hallgato.getVezeteknev() + ' ' + hallgato.getKeresztnev()
+                + ' - ' + hallgato.getJogviszony()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Jogviszony megváltoztatása">
+    </form>
+
+
+    <br>
+
+
+    <table>
+        <tr>
+            <td>Hallgató egyetemi azonosítója</td>
+            <td>Hallgató jogviszonya</td>
+        </tr>
+        <tr th:each="hallgato : ${hallgatok}">
+            <td th:text="${hallgato.getEgyetemiAzonosito()}"></td>
+            <td th:text="${hallgato.getJogviszony()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+
+    <h1>Jár</h1>
+    <br>
+
+    <h2>Jár kapcsolat létrehozása</h2>
+    <form action="#" th:action="@{/createJar}" th:object="${jar}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" th:field="${jar.szakAzonosito}" required>
+                <option th:each="szak : ${szakok}" th:value="${szak.getSzakAzonosito()}" th:text="${szak.getSzakAzonosito() + ' - ' + szak.getSzaknev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Hallgató egyetemi azonosítója:
+            <select name="egyetemiAzonosito" th:field="${jar.egyetemiAzonosito}" required>
+                <option th:each="hallgato : ${hallgatok}" th:value="${hallgato.getEgyetemiAzonosito()}"
+                        th:text="${hallgato.getEgyetemiAzonosito() + ' - ' + hallgato.getElotag() + ' ' + hallgato.getVezeteknev() + ' ' + hallgato.getKeresztnev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Kezdés szemesztere:
+            <select name="kezdesSzemesztere" th:field="${jar.kezdesSzemesztere}" required>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Végzés szemesztere:
+            <select name="vegzesSzemesztere" th:field="${jar.vegzesSzemesztere}">
+                <option value=""></option>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Diploma sorszáma:
+            <input type="text" name="diplomaSorszama" th:field="${jar.diplomaSorszama}" maxlength="25">
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Jár kapcsolat létrehozása">
+    </form>
+
+    <h2>Jár kapcsolat módosítása</h2>
+    <form action="#" th:action="@{/updateJar}" method="post">
+        <label>Szak-hallgató:
+            <select name="szakAzonosito" required>
+                <option th:each="jar : ${jarok}" th:value="${jar.getSzakAzonosito() + ';' + jar.getEgyetemiAzonosito()}" th:text="${jar.getSzakAzonosito() + ' ' + jar.getEgyetemiAzonosito()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Kezdés szemesztere:
+            <select name="kezdesSzemesztere" required>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Végzés szemesztere:
+            <select name="vegzesSzemesztere">
+                <option></option>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Diploma sorszáma:
+            <input type="text" name="diplomaSorszama" maxlength="25">
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Jár kapcsolat létrehozása">
+    </form>
+
+
+    <br>
+    <h2>Jár kapcsolat törlése</h2>
+    <form action="#" th:action="@{/deleteJar}" method="post">
+        <label>Szak azonosítója:
+            <select name="szakAzonosito" required>
+                <option th:each="jar : ${jarok}" th:value="${jar.getSzakAzonosito() + ';' + jar.getEgyetemiAzonosito()}" th:text="${jar.getSzakAzonosito() + ' - ' + jar.getEgyetemiAzonosito()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Jár kapcsolat törlése">
+    </form>
+
+
+    <br>
+
+    <table>
+        <tr>
+            <td>Szak azonosítója</td>
+            <td>Hallgató egyetemi azonosítója</td>
+            <td>Kezdés szemesztere</td>
+            <td>Végzés szemesztere</td>
+            <td>Diploma sorszáma</td>
+        </tr>
+        <tr th:each="jar : ${jarok}">
+            <td th:text="${jar.getSzakAzonosito()}"></td>
+            <td th:text="${jar.getEgyetemiAzonosito()}"></td>
+            <td th:text="${jar.getKezdesSzemesztere()}"></td>
+            <td th:text="${jar.getVegzesSzemesztere()}"></td>
+            <td th:text="${jar.getDiplomaSorszama()}"></td>
+        </tr>
+    </table>
+
+
+    <br>
+    <h1>Dolgozat</h1>
+
+
+    <h2>Dolgozat létrehozása</h2>
+    <form action="#" th:action="@{/createDolgozat}" th:object="${dolgozat}" method="post">
+        <label>Dolgozat címe:
+            <input type="text" name="cim" th:field="${dolgozat.cim}" maxlength="150" required>
+        </label>
+        <br>
+        <br>
+        <label>Beadás éve:
+            <select name="beadasEve" th:field="${dolgozat.beadasEve}" required>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select> </label>
+        <br>
+        <br>
+        <label>Védés éve:
+            <select name="vedesEve" th:field="${dolgozat.vedesEve}" required>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Védés érdemjegye:
+            <select name="vedesErdemjegye" th:field="${dolgozat.vedesErdemjegye}">
+                <option value="0"></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Hallgató:
+            <select name="egyetemiAzonosito" id="egyetemiAzonosito" th:field="${dolgozat.egyetemiAzonosito}" required onchange="loadszak()">
+                <option th:each="hallgato : ${hallgatok}" th:value="${hallgato.getEgyetemiAzonosito()}"
+                        th:text="${hallgato.getEgyetemiAzonosito() + ' - ' + hallgato.getElotag() + ' ' + hallgato.getVezeteknev() + ' ' + hallgato.getKeresztnev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Szak:
+            <select name="szakAzonosito" id="szakAzonosito" th:field="${dolgozat.szakAzonosito}" required onchange="loadtanszekNev()" onmouseover="loadtanszekNev()">
+
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Tanszék:
+            <select name="tanszekNev" id="tanszekNev" th:field="${dolgozat.tanszekNev}" required>
+
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Dolgozat létrehozása">
+    </form>
+
+    <script>
+        function loadszak() {
+            var egyetemiAzonositoSelect = document.getElementById("egyetemiAzonosito");
+            var selectedegyetemiAzonosito = egyetemiAzonositoSelect.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/loadszak?egyetemiAzonosito=" + selectedegyetemiAzonosito, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var szakAzonositoSelect = document.getElementById("szakAzonosito");
+
+                    szakAzonositoSelect.innerHTML = "";
+
+                    var szakNevek = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < szakNevek.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = Object.values(szakNevek[i])[0];
+                        option.text = Object.values(szakNevek[i])[0] + " - " + Object.values(szakNevek[i])[1];
+                        szakAzonositoSelect.add(option);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function loadtanszekNev() {
+            var szakAzonositoSelect = document.getElementById("szakAzonosito");
+            var selectedszakAzonosito = szakAzonositoSelect.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/loadtanszekNev?szakAzonosito=" + selectedszakAzonosito, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var tanszekNevSelect = document.getElementById("tanszekNev");
+
+                    tanszekNevSelect.innerHTML = "";
+
+                    var tanszekNevek = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < tanszekNevek.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = Object.values(tanszekNevek[i]).slice(0, -1);
+                        option.text = Object.values(tanszekNevek[i]).slice(0, -1);
+                        tanszekNevSelect.add(option);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+
+    <h2>Dolgozat módosítása</h2>
+    <form action="#" th:action="@{/updateDolgozat}" th:object="${dolgozat}" method="post">
+
+        <label>Dolgozat azonosítója:
+            <select name="dolgozatAzonosito" id="dolgozatAzonosito" th:field="${dolgozat.dolgozatAzonosito}" required>
+                <option th:each="dolgozat : ${dolgozatok}" th:value="${dolgozat.getDolgozatAzonosito()}"
+                        th:text="${dolgozat.getDolgozatAzonosito() + ' - ' + dolgozat.getCim()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Dolgozat címe:
+            <input type="text" name="cim" maxlength="150" id="cim" th:field="${dolgozat.cim}" required>
+        </label>
+        <br>
+        <br>
+        <label>Beadás éve:
+            <select name="beadasEve" th:field="${dolgozat.beadasEve}" required>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select> </label>
+        <br>
+        <br>
+        <label>Védés éve:
+            <select name="vedesEve" th:field="${dolgozat.vedesEve}" required>
+                <option th:each="szemeszter : ${szemeszterek}" th:value="${szemeszter}" th:text="${szemeszter}"></option>
+            </select> </label>
+        <br>
+        <br>
+        <label>Védés érdemjegye:
+            <select name="vedesErdemjegye" id="vedesErdemjegye" th:field="${dolgozat.vedesErdemjegye}">
+                <option value="0"></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Hallgató:
+            <select name="egyetemiAzonosito" id="egyetemiAzonosito2" th:field="${dolgozat.egyetemiAzonosito}" required onchange="loadszak2()">
+                <option th:each="hallgato : ${hallgatok}" th:value="${hallgato.getEgyetemiAzonosito()}"
+                        th:text="${hallgato.getEgyetemiAzonosito() + ' - ' + hallgato.getElotag() + ' ' + hallgato.getVezeteknev() + ' ' + hallgato.getKeresztnev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Szak:
+            <select name="szakAzonosito" id="szakAzonosito2" th:field="${dolgozat.szakAzonosito}" required onchange="loadtanszekNev2()" onmouseover="loadtanszekNev2()">
+
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Tanszék:
+            <select name="tanszekNev" id="tanszekNev2" th:field="${dolgozat.tanszekNev}" required>
+
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Dolgozat módosítása">
+    </form>
+
+
+    <script>
+        function loadszak2() {
+            var egyetemiAzonositoSelect = document.getElementById("egyetemiAzonosito2");
+            var selectedegyetemiAzonosito = egyetemiAzonositoSelect.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/loadszak?egyetemiAzonosito=" + selectedegyetemiAzonosito, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var szakAzonositoSelect = document.getElementById("szakAzonosito2");
+
+                    szakAzonositoSelect.innerHTML = "";
+
+                    var szakNevek = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < szakNevek.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = Object.values(szakNevek[i])[0];
+                        option.text = Object.values(szakNevek[i])[0] + " - " + Object.values(szakNevek[i])[1];
+                        szakAzonositoSelect.add(option);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function loadtanszekNev2() {
+            var szakAzonositoSelect = document.getElementById("szakAzonosito2");
+            var selectedszakAzonosito = szakAzonositoSelect.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/loadtanszekNev?szakAzonosito=" + selectedszakAzonosito, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var tanszekNevSelect = document.getElementById("tanszekNev2");
+
+                    tanszekNevSelect.innerHTML = "";
+
+                    var tanszekNevek = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < tanszekNevek.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = Object.values(tanszekNevek[i]).slice(0, -1);
+                        option.text = Object.values(tanszekNevek[i]).slice(0, -1);
+                        tanszekNevSelect.add(option);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+    <h2>Dolgozat törlése</h2>
+    <form action="#" th:action="@{/deleteDolgozat}" th:object="${dolgozat}" method="post">
+        <label>Dolgozat neve:
+            <select name="dolgozatAzonosito" th:field="${dolgozat.dolgozatAzonosito}" required>
+                <option th:each="dolgozat : ${dolgozatok}" th:value="${dolgozat.getDolgozatAzonosito()}" th:text="${dolgozat.getDolgozatAzonosito() + ' - ' + dolgozat.getCim()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Dolgozat törlése">
+    </form>
+
+
+    <br>
+    <table>
+        <tr>
+            <td>Dolgozat azonosítója</td>
+            <td>Dolgozat címe</td>
+            <td>Beadás éve</td>
+            <td>Védés éve</td>
+            <td>Védés érdemjegye</td>
+            <td>Hallgató egyetemi azonosítója</td>
+            <td>Szak azonosítója</td>
+            <td>Tanszék neve</td>
+        </tr>
+        <tr th:each="dolgozat : ${dolgozatok}">
+            <td th:text="${dolgozat.getDolgozatAzonosito()}"></td>
+            <td th:text="${dolgozat.getCim()}"></td>
+            <td th:text="${dolgozat.getBeadasEve()}"></td>
+            <td th:text="${dolgozat.getVedesEve()}"></td>
+            <td th:text="${dolgozat.getVedesErdemjegye()}"></td>
+            <td th:text="${dolgozat.getEgyetemiAzonosito()}"></td>
+            <td th:text="${dolgozat.getSzakAzonosito()}"></td>
+            <td th:text="${dolgozat.getTanszekNev()}"></td>
+        </tr>
+    </table>
+    <br>
+    <br>
+
+    <h1>Vezet</h1>
+
+    <br>
+
+
+    <h2>Vezet kapcsolat létrehozása</h2>
+    <form action="#" th:action="@{/createVezet}" th:object="${vezet}" method="post">
+        <label>Dolgozat azonosítója:
+            <select name="dolgozatAzonosito" id="dolgozatAzonosito2" th:field="${vezet.dolgozatAzonosito}" required onchange="loadtemavezeto()">
+                <option th:each="dolgozat : ${dolgozatok}" th:value="${dolgozat.getDolgozatAzonosito()}" th:text="${dolgozat.getDolgozatAzonosito() + ' - ' + dolgozat.getCim()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Témavezető egyetemi azonosítója:
+            <select name="egyetemiAzonosito" id="egyetemiAzonosito3" th:field="${vezet.egyetemiAzonosito}" required>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Vezet kapcsolat létrehozása">
+    </form>
+
+    <script>
+
+        function loadtemavezeto() {
+            var dolgozatAzonositoSelect = document.getElementById("dolgozatAzonosito2");
+            var selecteddolgozatAzonosito = dolgozatAzonositoSelect.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/loadtemavezeto?dolgozatAzonosito=" + selecteddolgozatAzonosito, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var temavezetoSelect = document.getElementById("egyetemiAzonosito3");
+
+                    temavezetoSelect.innerHTML = "";
+
+                    var temavezetoNevek = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < temavezetoNevek.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = temavezetoNevek[i];
+                        option.text = temavezetoNevek[i];
+                        temavezetoSelect.add(option);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+
+    <h2>Vezet kapcsolat módosítása</h2>
+    <form action="#" th:action="@{/updateVezet}" th:object="${vezet}" method="post">
+        <label>Dolgozat azonosítója:
+            <select name="dolgozatAzonosito" id="dolgozatAzonosito3" th:field="${vezet.dolgozatAzonosito}" required onchange="loadtemavezeto2()">
+                <option th:each="dolgozat : ${dolgozatok}" th:value="${dolgozat.getDolgozatAzonosito()}" th:text="${dolgozat.getDolgozatAzonosito() + ' - ' + dolgozat.getCim()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Témavezető egyetemi azonosítója:
+            <select name="egyetemiAzonosito" id="egyetemiAzonosito4" th:field="${vezet.egyetemiAzonosito}" required>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Vezet kapcsolat módosítása"></input>
+    </form>
+
+    <script>
+        function loadtemavezeto2() {
+            var dolgozatAzonositoSelect = document.getElementById("dolgozatAzonosito3");
+            var selecteddolgozatAzonosito = dolgozatAzonositoSelect.value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/loadtemavezeto?dolgozatAzonosito=" + selecteddolgozatAzonosito, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var temavezetoSelect = document.getElementById("egyetemiAzonosito4");
+
+                    temavezetoSelect.innerHTML = "";
+
+                    var temavezetoNevek = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < temavezetoNevek.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = temavezetoNevek[i];
+                        option.text = temavezetoNevek[i];
+                        temavezetoSelect.add(option);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+
+    <h2>Vezet kapcsolat törlése</h2>
+    <form action="#" th:action="@{/deleteVezet}" method="post">
+        <label>Dolgozat azonosító - Témavezető azonosító:
+            <select name="dolgozatAzonosito" required>
+                <option th:each="vezet : ${vezetek}" th:value="${vezet.getDolgozatAzonosito() + ';' + vezet.getEgyetemiAzonosito()}"
+                        th:text="${vezet.getDolgozatAzonosito() + ' - ' + vezet.getEgyetemiAzonosito()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Vezet kapcsolat törlése">
+    </form>
+
+
+    <br>
+
+    <table>
+        <tr>
+            <td>Dolgozat azonosítója</td>
+            <td>Témavezető egyetemi azonosítója</td>
+        </tr>
+        <tr th:each="vezet : ${vezetek}">
+            <td th:text="${vezet.getDolgozatAzonosito()}"></td>
+            <td th:text="${vezet.getEgyetemiAzonosito()}"></td>
+        </tr>
+    </table>
+
+
+    <br>
+    <br>
+
+    <h2>Kimutatás arról, hogy egy adott félévben melyik témavezetőhöz hány dolgozat lett beadva.</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Beadás éve</th>
+            <th>Témavezető egyetemi azonosítója</th>
+            <th>Dolgozatok száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="statisztika : ${melyikTemavezetohozHanyDolgozatFelevente}">
+            <td th:text="${statisztika['Beadás éve']}"></td>
+            <td th:text="${statisztika['Témavezető egyetemi azonosítója']}"></td>
+            <td th:text="${statisztika['Dolgozatok száma']}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <br>
+    <br>
+
+    <h2>Kimutatás arról, hogy tanszékenként és félévente hány dolgozat készült.</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Tanszék neve</th>
+            <th>Beadás éve</th>
+            <th>Dolgozatok száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="statisztika2 : ${tanszekenkentHanyDolgozatFelevente}">
+            <td th:text="${statisztika2['Tanszék neve']}"></td>
+            <td th:text="${statisztika2['Beadás éve']}"></td>
+            <td th:text="${statisztika2['Dolgozatok száma']}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <br>
+    <br>
+    <h1>Admin</h1>
+
+
+    <div class="register">
+        <div th:if="${param.error}">
+            <div class="alert">
+                <span th:text="#{register.error}"></span>
+            </div>
+        </div>
+        <div th:if="${param.success}">
+            <div class="success">
+                <span th:text="#{register.success}"></span>
+            </div>
+        </div>
+        <h2>Admin regisztráció</h2>
+        <form action="#" th:action="@{/registeradmin}" th:object="${adminisztrator}" method="post">
+            <label>Egyetemi azonosító:
+                <input type="text" name="egyetemiAzonosito" th:field="${adminisztrator.egyetemiAzonosito}" required minlength="6" maxlength="6">
+            </label>
+            <label>Előtag:
+                <select name="elotag" th:field="${adminisztrator.elotag}">
+                    <option value=""></option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="dr.">dr.</option>
+                    <option value="Prof.">Prof.</option>
+                </select>
+            </label>
+            <label>Vezetéknév:
+                <input type="text" name="vezeteknev" th:field="${adminisztrator.vezeteknev}" required maxlength="100">
+            </label>
+            <label>Keresztnév:
+                <input type="text" name="keresztnev" th:field="${adminisztrator.keresztnev}" required maxlength="100">
+            </label>
+            <label>Jelszó:
+                <input type="password" name="jelszo" th:field="${adminisztrator.jelszo}" required minlength="8" maxlength="128">
+            </label>
+            <label>Jelszó újra:
+                <input type="password" name="jelszoUjra" th:field="${adminisztrator.jelszoUjra}" required minlength="8" maxlength="128">
+            </label>
+            <label>Munkaköri beosztás:
+                <select name="munkakoriBeosztas" th:field="${adminisztrator.munkakoriBeosztas}" required>
+                    <option value="tanulmányi előadó">Tanulmányi előadó</option>
+                    <option value="oktatási referens">Oktatási referens</option>
+                    <option value="oktatásszervező">Oktatásszervező</option>
+                </select>
+            </label>
+            <input type="submit" value="Regisztráció">
+        </form>
+    </div>
+
+
+    <h2>Admin megváltoztatása</h2>
+    <form action="#" th:action="@{/updateAdmin}" th:object="${adminisztrator}" method="post">
+        <label>Admin:
+            <select name="egyetemiAzonosito" th:field="${adminisztrator.egyetemiAzonosito}" required>
+                <option th:each="admin : ${adminok}" th:value="${admin.getEgyetemiAzonosito()}"
+                        th:text="${admin.getEgyetemiAzonosito() + ' - ' + admin.getElotag() + ' ' + admin.getVezeteknev()  + ' ' + admin.getKeresztnev()
+                + ' - ' + admin.getMunkakoriBeosztas()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Munkaköri beosztás:
+            <select name="munkakoriBeosztas" th:field="${adminisztrator.munkakoriBeosztas}" required>
+                <option value="tanulmányi előadó">Tanulmányi előadó</option>
+                <option value="oktatási referens">Oktatási referens</option>
+                <option value="oktatásszervező">Oktatásszervező</option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Admin adatainak megváltoztatása">
+    </form>
+
+
+    <br>
+
+    <table>
+        <tr>
+            <td>Adminisztrátor egyetemi azonosítója</td>
+            <td>Adminisztrátor munkaköri beosztása</td>
+        </tr>
+        <tr th:each="admin : ${adminok}">
+            <td th:text="${admin.getEgyetemiAzonosito()}"></td>
+            <td th:text="${admin.getMunkakoriBeosztas()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h1>Témavezető</h1>
+
+
+    <div class="register">
+        <div th:if="${param.error2}">
+            <div class="alert">
+                <span th:text="#{register.error2}"></span>
+            </div>
+        </div>
+        <div th:if="${param.success2}">
+            <div class="success">
+                <span th:text="#{register.success2}"></span>
+            </div>
+        </div>
+        <h2>Külső témavezetői regisztráció</h2>
+        <form action="#" th:action="@{/registerkulsotv}" th:object="${temavezeto}" method="post" id="myForm">
+            <label>Egyetemi azonosító:
+                <input type="text" name="egyetemiAzonosito" th:field="${temavezeto.egyetemiAzonosito}" required minlength="6" maxlength="6">
+            </label>
+            <label>Előtag:
+                <select name="elotag" th:field="${temavezeto.elotag}">
+                    <option value=""></option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="dr.">dr.</option>
+                    <option value="Prof.">Prof.</option>
+                </select>
+            </label>
+            <label>Vezetéknév:
+                <input type="text" name="vezeteknev" th:field="${temavezeto.vezeteknev}" required maxlength="100">
+            </label>
+            <label>Keresztnév:
+                <input type="text" name="keresztnev" th:field="${temavezeto.keresztnev}" required maxlength="100">
+            </label>
+            <label>Jelszó:
+                <input type="password" name="jelszo" th:field="${temavezeto.jelszo}" required minlength="8" maxlength="128">
+            </label>
+            <label>Jelszó újra:
+                <input type="password" name="jelszoUjra" th:field="${temavezeto.jelszoUjra}" required minlength="8" maxlength="128">
+            </label>
+            <input type="submit" value="Regisztráció">
+        </form>
+    </div>
+
+
+    <h2>Belső témavezető megváltoztatása</h2>
+    <form action="#" th:action="@{/updateBelsoTV}" th:object="${temavezeto}" method="post">
+        <label>Belső témavezető:
+            <select name="egyetemiAzonosito" th:field="${temavezeto.egyetemiAzonosito}" required>
+                <option th:each="belso : ${belsotemavezetok}" th:value="${belso.getEgyetemiAzonosito()}"
+                        th:text="${belso.getEgyetemiAzonosito() + ' - ' + belso.getElotag() + ' ' + belso.getVezeteknev()  + ' ' + belso.getKeresztnev()
+                + ' - ' + belso.getMunkakoriBeosztas() + ' - ' + belso.getTanszekNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Munkaköri beosztás:
+            <select name="munkakoriBeosztas" th:field="${temavezeto.munkakoriBeosztas}" required>
+                <option value="egyetemi tanár">Egyetemi tanár</option>
+                <option value="egyetemi docens">Egyetemi docens</option>
+                <option value="adjunktus">Adjunktus</option>
+                <option value="tanársegéd">Tanársegéd</option>
+                <option value="PhD hallgató">PhD hallgató</option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Tanszék:
+            <select name="tanszekNev" th:field="${temavezeto.tanszekNev}" required>
+                <option th:each="tanszek : ${tanszekek}" th:value="${tanszek.getTanszekNev()}"
+                        th:text="${tanszek.getTanszekNev() + ' - ' + tanszek.getIntezetNev()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Belső témavezető adatainak megváltoztatása">
+    </form>
+
+
+    <br>
+    <table>
+        <tr>
+            <td>Témavezető egyetemi azonosítója</td>
+            <td>Témavezető munkaköri beosztása</td>
+            <td>Témavezető szerepköre</td>
+            <td>Tanszék neve</td>
+        </tr>
+        <tr th:each="temavezeto : ${temavezetok}">
+            <td th:text="${temavezeto.getEgyetemiAzonosito()}"></td>
+            <td th:text="${temavezeto.getMunkakoriBeosztas()}"></td>
+            <td th:text="${temavezeto.getSzerepkor()}"></td>
+            <td th:text="${temavezeto.getTanszekNev()}"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h1>Személy</h1>
+
+
+    <h2>Személy módosítása</h2>
+    <form action="#" th:action="@{/updateSzemely}" th:object="${szemely}" method="post">
+        <label>Személy:
+            <select name="egyetemiAzonosito" th:field="${szemely.egyetemiAzonosito}" required>
+                <option th:each="szemely : ${szemelyek}" th:value="${szemely.getEgyetemiAzonosito()}"
+                        th:text="${szemely.getEgyetemiAzonosito() + ' - ' + szemely.getElotag() + ' ' + szemely.getVezeteknev() + ' ' + szemely.getKeresztnev()
+                + ' - ' + szemely.getJogosultsag()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Előtag:
+            <select name="elotag" th:field="${szemely.elotag}">
+                <option value=""></option>
+                <option value="Dr.">Dr.</option>
+                <option value="dr.">dr.</option>
+                <option value="Prof.">Prof.</option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <label>Vezetéknév:
+            <input type="text" name="vezeteknev" th:field="${szemely.vezeteknev}" maxlength="100">
+        </label>
+        <br>
+        <br>
+        <label>Keresztnév:
+            <input type="text" name="keresztnev" th:field="${szemely.keresztnev}" maxlength="100">
+        </label>
+        <br>
+        <br>
+        <label>Jelszó:
+            <input type="password" name="jelszo" th:field="${szemely.jelszo}" minlength="8" maxlength="128">
+        </label>
+        <br>
+        <br>
+        <label>Jelszó újra:
+            <input type="password" name="jelszoUjra" th:field="${szemely.jelszoUjra}" minlength="8" maxlength="128">
+        </label>
+        <br>
+        <br>
+
+        <input type="submit" value="Személy módosítása">
+    </form>
+
+    <h2>Személy törlése</h2>
+    <form action="#" th:action="@{/deleteSzemely}" th:object="${szemely}" method="post">
+        <label>Személy:
+            <select name="egyetemiAzonosito" th:field="${szemely.egyetemiAzonosito}" required>
+                <option th:each="szemely : ${szemelyek}" th:value="${szemely.getEgyetemiAzonosito()}"
+                        th:text="${szemely.getEgyetemiAzonosito() + ' - ' + szemely.getElotag() + ' ' + szemely.getVezeteknev() + ' ' + szemely.getKeresztnev()
+                + ' - ' + szemely.getJogosultsag()}"></option>
+            </select>
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Személy törlése">
+    </form>
+
+    <br>
+
+    <table>
+        <tr>
+            <td>Személy egyetemi azonosítója</td>
+            <td>Személy előtagja</td>
+            <td>Személy vezetékneve</td>
+            <td>Személy keresztneve</td>
+            <td>Személy jelszava</td>
+            <td>Személy jogosultsága</td>
+        </tr>
+        <tr th:each="szemely : ${szemelyek}">
+            <td th:text="${szemely.getEgyetemiAzonosito()}"></td>
+            <td th:text="${szemely.getElotag()}"></td>
+            <td th:text="${szemely.getVezeteknev()}"></td>
+            <td th:text="${szemely.getKeresztnev()}"></td>
+            <td th:text="${szemely.getJelszo()}"></td>
+            <td th:text="${szemely.getJogosultsag()}"></td>
+        </tr>
+    </table>
+
+</main>
+
+</body>
+</html>
